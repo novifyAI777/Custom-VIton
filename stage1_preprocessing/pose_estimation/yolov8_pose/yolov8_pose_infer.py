@@ -9,6 +9,7 @@ import numpy as np
 class YOLOv8Pose:
     def __init__(self, weights=None, device='cpu'):
         self.weights = weights
+        weights = "pose_estimation/yolov8_pose/yolo11n-pose.pt"
         print(f"YOLOv8Pose init (weights={weights})")
 
     def predict(self, image_path):

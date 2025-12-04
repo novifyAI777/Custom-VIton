@@ -3,7 +3,7 @@ Auto-generated template file
 Pose wrapper
 """
 
-from yolov8_pose.yolov8_pose_infer import YOLOv8Pose
+from .yolov8_pose.yolov8_pose_infer import YOLOv8Pose
 def run(input_path, out_path, weights=None):
     model = YOLOv8Pose(weights)
     kps = model.predict(input_path)

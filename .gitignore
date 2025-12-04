@@ -1,0 +1,42 @@
+# Virtual Environment
+env/
+venv/
+.venv/
+
+# Python
+*.pyc
+__pycache__/
+*.pyo
+*.pyd
+.Python
+
+# Large model files (download separately or use Git LFS)
+*.pth
+*.pt
+*.onnx
+*.safetensors
+*.ckpt
+*.bin
+*.h5
+*.pb
+
+# Data files
+data/stage1_output/
+data/stage2_output/
+data/stage3_output/
+data/stage4_output/
+*.jpg
+*.jpeg
+*.png
+*.bmp
+*.gif
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
