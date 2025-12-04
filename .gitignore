@@ -20,16 +20,6 @@ __pycache__/
 *.h5
 *.pb
 
-# Data files
-data/stage1_output/
-data/stage2_output/
-data/stage3_output/
-data/stage4_output/
-*.jpg
-*.jpeg
-*.png
-*.bmp
-*.gif
 
 # IDE
 .vscode/
