@@ -2,7 +2,7 @@
 Stage 1 - Image Cleaning using rembg (Background Removal)
 """
 
-from rembg import remove
+from rembg import remove 
 from PIL import Image
 import numpy as np
 import os

@@ -2,6 +2,7 @@
 env/
 venv/
 .venv/
+py312
 
 # Python
 *.pyc
