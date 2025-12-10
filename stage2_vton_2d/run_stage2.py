@@ -1,13 +1,16 @@
 import os
 import subprocess
 import shutil
+import torch
 
 def run_stage2(stage1_dir, out_dir):
     repo = "stage2_vton_2d/cp-vton-plus"
     dataset = "../cp_vton_pp/dataset"
     pairs = "test_pairs.txt"
 
-    print("### Stage 2 — CP-VITON++ Inference")
+    # Check GPU availability
+    gpu_available = torch.cuda.is_available()
+    print(f"### Stage 2 — CP-VITON++ Inference (GPU: {gpu_available})")
 
     # 1️⃣ Prepare dataset
     from prepare_inputs import prepare
@@ -24,7 +27,10 @@ def run_stage2(stage1_dir, out_dir):
         "--result_dir", os.path.join(out_dir, "gmm"),
         "--checkpoint", "./checkpoints/GMM.pth"
     ]
-    subprocess.run(cmd_gmm, cwd=repo, check=True)
+    env = os.environ.copy()
+    if gpu_available:
+        env["CUDA_VISIBLE_DEVICES"] = "0"
+    subprocess.run(cmd_gmm, cwd=repo, check=True, env=env)
     
     # Copy GMM outputs to dataset for TOM to use
     print("### Copying GMM outputs to dataset...")
@@ -72,7 +78,7 @@ def run_stage2(stage1_dir, out_dir):
         "--result_dir", out_dir,
         "--checkpoint", "./checkpoints/TOM.pth"
     ]
-    subprocess.run(cmd_tom, cwd=repo, check=True)
+    subprocess.run(cmd_tom, cwd=repo, check=True, env=env)
 
     # 4️⃣ Copy TOM outputs to final destination
     print("### Copying TOM outputs to final destination...")

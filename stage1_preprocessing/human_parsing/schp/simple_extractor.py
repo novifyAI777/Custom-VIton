@@ -115,11 +115,15 @@ def main():
     num_classes = dataset_settings[args.dataset]['num_classes']
     input_size = dataset_settings[args.dataset]['input_size']
     label = dataset_settings[args.dataset]['label']
-    print("Evaluating total class number {} with {}".format(num_classes, label))
+    print("Evaluating total class number {} with {}".format(num_classes, label), flush=True)
 
+    print("Initializing model...", flush=True)
     model = networks.init_model('resnet101', num_classes=num_classes, pretrained=None)
+    print("Model initialized", flush=True)
 
+    print(f"Loading checkpoint from {args.model_restore}...", flush=True)
     state_dict = torch.load(args.model_restore, weights_only=False)['state_dict']
+    print("Checkpoint loaded", flush=True)
     from collections import OrderedDict
     new_state_dict = OrderedDict()
     for k, v in state_dict.items():
@@ -137,16 +141,25 @@ def main():
         transforms.Normalize(mean=[0.406, 0.456, 0.485], std=[0.225, 0.224, 0.229])
     ])
     dataset = SimpleFolderDataset(root=args.input_dir, input_size=input_size, transform=transform)
-    dataloader = DataLoader(dataset)
+    dataloader = DataLoader(dataset, batch_size=1, num_workers=0)  # num_workers=0 for CPU stability
+    
+    print(f"Dataset size: {len(dataset)}", flush=True)
+    if len(dataset) == 0:
+        print("ERROR: No images found in input directory!", flush=True)
+        return
+    print(f"Dataset file list: {dataset.file_list}", flush=True)
 
     if not os.path.exists(args.output_dir):
         os.makedirs(args.output_dir)
 
     palette = get_palette(num_classes)
+    print("Starting inference...", flush=True)
     with torch.no_grad():
-        for idx, batch in enumerate(tqdm(dataloader)):
+        for idx, batch in enumerate(dataloader):
+            print(f"Processing batch {idx + 1}/{len(dataloader)}", flush=True)
             image, meta = batch
             img_name = meta['name'][0]
+            print(f"Image name: {img_name}", flush=True)
             c = meta['center'].numpy()[0]
             s = meta['scale'].numpy()[0]
             w = meta['width'].numpy()[0]
@@ -156,7 +169,9 @@ def main():
             if use_cuda:
                 image = image.cuda()
             
+            print("Running model inference...", flush=True)
             output = model(image)
+            print("Model inference complete", flush=True)
             upsample = torch.nn.Upsample(size=input_size, mode='bilinear', align_corners=True)
             upsample_output = upsample(output[0][-1][0].unsqueeze(0))
             upsample_output = upsample_output.squeeze()
@@ -166,9 +181,11 @@ def main():
             parsing_result = np.argmax(logits_result, axis=2)
             # Save with temp name, will be renamed by wrapper
             parsing_result_path = os.path.join(args.output_dir, '_temp_parsing_' + img_name[:-4] + '.png')
+            print(f"Saving parsing result to: {parsing_result_path}")
             output_img = Image.fromarray(np.asarray(parsing_result, dtype=np.uint8))
             output_img.putpalette(palette)
             output_img.save(parsing_result_path)
+            print(f"✓ Saved parsing result: {parsing_result_path}")
             if args.logits:
                 logits_result_path = os.path.join(args.output_dir, '_temp_parsing_' + img_name[:-4] + '.npy')
                 np.save(logits_result_path, logits_result)

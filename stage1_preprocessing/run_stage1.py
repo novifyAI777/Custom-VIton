@@ -68,7 +68,7 @@ def run_all(person, cloth, outdir):
     
     # Step 2: Human parsing  
     print("\nStep 2: Human Parsing (SCHP)")
-    run_parse(person_clean, outdir)  # Pass outdir directly instead of parsing_out
+    run_parse(person_clean, outdir)
     
     # Verify the parsing output exists
     parsing_file = os.path.join(outdir, "parsing.png")
