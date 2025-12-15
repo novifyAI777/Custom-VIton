@@ -11,6 +11,9 @@ __pycache__/
 *.pyd
 .Python
 
+# Checkpoints directory (model weights)
+checkpoints/
+
 # Large model files (download separately or use Git LFS)
 *.pth
 *.pt
@@ -20,7 +23,6 @@ __pycache__/
 *.bin
 *.h5
 *.pb
-
 
 # IDE
 .vscode/
