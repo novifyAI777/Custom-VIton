@@ -3,18 +3,52 @@ env/
 venv/
 .venv/
 py312
+*.egg-info/
+dist/
+build/
 
 # Python
 *.pyc
-__pycache__/
 *.pyo
 *.pyd
 .Python
+__pycache__/
+*.egg
+.pytest_cache/
+.coverage
+htmlcov/
+*.so
+*.o
+*.xml
+*.dll
+*.hpp
+*.jpg
+*.property
+*.exe 
+*.debug
+*.lib
+*.obj
 
-# Checkpoints directory (model weights)
+# Jupyter Notebooks
+.ipynb_checkpoints/
+*.ipynb
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*.sublime-project
+*.sublime-workspace
+.DS_Store
+Thumbs.db
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Checkpoints and model weights (download separately or use Git LFS)
 checkpoints/
-
-# Large model files (download separately or use Git LFS)
 *.pth
 *.pt
 *.onnx
@@ -23,13 +57,60 @@ checkpoints/
 *.bin
 *.h5
 *.pb
+model_cache/
+models/
 
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
+# Large external repositories (clone separately)
+stage3_3d_reconstruction/TripoSR/
+stage3_3d_reconstruction/IDOL/
+stage1_preprocessing/human_parsing/Self-Correction-Human-Parsing/
 
-# OS
+# Data files (large)
+data/input/*.jpg
+data/input/*.png
+data/stage1_output/
+data/stage2_output/
+data/stage3_output/
+data/stage4_output/
+data/stage5_visualization/
+
+# Logs and temp files
+*.log
+*.tmp
+*.temp
+stage2_debug.log
+debug.log
+*.log.*
+
+# Generated/test outputs
+results/
+output/
+temp/
+.tmp/
+test_output/
+cache/
+
+# Windows specific
+.env.local
+.env.*.local
+*.lnk
+
+# macOS specific
 .DS_Store
-Thumbs.db
+.AppleDouble
+.LSOverride
+._*
+
+# Visualization files (generated)
+*.html
+!index.html
+!README.html
+
+# Specific unwanted changed files
+stage3_3d_reconstruction/run_idol_cpu.py
+stage3_3d_reconstruction/README.md
+stage3_3d_reconstruction/pifuhd/
+stage1_preprocessing/human_parsing/schp/simple_extractor.py
+CONFIGURATION.md
+stage2_debug.log
+.gitkeep
